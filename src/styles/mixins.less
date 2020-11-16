@@ -1,0 +1,30 @@
+// 垂直居中
+.flex-vertical {
+  display: flex;
+  align-items: center;
+}
+
+// 水平垂直居中
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 水平垂直居中并充满容器
+.flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+// 清除浮动
+.clearfix {
+  &::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+}

@@ -1,0 +1,56 @@
+@import (reference) './antd.theme.less';
+
+// 按钮
+.ant-btn-link {
+  padding: 0;
+}
+
+// 排版
+.ant-typography {
+  .ant-typography-copy {
+    opacity: 0;
+  }
+
+  &:hover {
+    .ant-typography-copy {
+      opacity: 1;
+    }
+  }
+}
+
+// tooltip
+.ant-tooltip {
+  max-width: initial;
+}
+
+// alert
+.alert-style(@color) {
+  .ant-alert-message {
+    color: @color;
+  }
+
+  .ant-alert-description {
+    color: lighten(@color, 10%);
+  }
+}
+
+.ant-alert-info {
+  .alert-style(@primary-color);
+}
+
+.ant-alert-success {
+  .alert-style(@success-color);
+}
+
+.ant-alert-error {
+  .alert-style(@error-color);
+}
+
+.ant-alert-warning {
+  .alert-style(@warning-color);
+}
+
+// form
+.ant-form-item-explain {
+  font-size: 12px;
+}

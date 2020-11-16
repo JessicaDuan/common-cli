@@ -1,10 +1,22 @@
 const CracoAntDesignPlugin = require("craco-antd");
 const CracoAlias = require("craco-alias");
 const CracoLessPlugin = require("craco-less");
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
  
 const path = require('path');
  
 module.exports = {
+  webpack: {
+    plugins: [
+      new ProgressBarPlugin({
+        format: '  build [:bar] ' + ':percent ' + ' (:elapsed seconds)' + ' :msg',
+        clear: false,
+      }),
+    ],
+  },
+  eslint: {
+    enable: false,
+  },
   plugins: [
     /* antd组件按需加载&样式覆盖等 */
     {

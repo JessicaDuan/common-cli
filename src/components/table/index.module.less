@@ -1,0 +1,101 @@
+@import (reference) '~@/styles/mixins.less';
+@import './utils/config.less';
+
+.cell-style {
+  padding: 4px 16px;
+  margin: -1px;
+}
+
+.row {
+  &:not(:last-child) {
+    border-bottom: 1px solid @border-color;
+  }
+}
+
+.fixed-cell-style {
+  position: sticky;
+  z-index: 3;
+}
+
+.table-wrapper {
+  position: relative;
+  border: 1px solid @border-color;
+
+  // 表头
+  .table-header-background {
+    background: @header-bg-color;
+
+    .table-header-wrapper {
+      overflow: hidden;
+
+      .table-header {
+        width: 100%;
+        table-layout: fixed;
+
+        .header {
+          border-bottom: 1px solid @border-color;
+
+          // 表头元素
+          .header-cell {
+            .cell-style();
+
+            position: relative;
+            background: @header-bg-color;
+
+            &.fixed-left {
+              .fixed-cell-style();
+            }
+
+            &.fixed-right {
+              .fixed-cell-style();
+            }
+
+            &:hover {
+              cursor: pointer;
+              background: darken(@header-bg-color, 5%);
+            }
+
+            .inner-header-cell {
+              .flex-vertical();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 表格主体部分
+  .table-body {
+    width: 100%;
+    table-layout: fixed;
+
+    .body {
+      // 行悬浮效果
+      .row {
+        &:hover {
+          background: fade(@header-bg-color, 30%);
+        }
+      }
+
+      .cell {
+        background: @body-bg-color;
+
+        &.fixed-left {
+          .fixed-cell-style();
+        }
+
+        &.fixed-right {
+          .fixed-cell-style();
+        }
+
+        .inner-cell {
+          .cell-style();
+
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

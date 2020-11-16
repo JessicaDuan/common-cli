@@ -1,0 +1,50 @@
+@import (reference) './antd.theme.less';
+@import (reference) './default.less';
+@import './mixins.less';
+
+html,
+body,
+#root {
+  position: relative;
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  background: #fff;
+}
+
+// 复杂表单特殊类名：
+// custom-validate-form-item: 加在FormItem上，默认未通过验证的所有表单项边框不变红
+// validate-danger: 加在内部的Select、Input等组件上，根据值是否满足条件选择附加此类名，使内部组件边框变红
+.custom-validate-form-item {
+  &.ant-form-item-has-error {
+    .ant-select:not(.ant-select-borderless) {
+      .ant-select-selector {
+        border-color: #d9d9d9 !important;
+      }
+    }
+
+    .ant-input,
+    .ant-input-number,
+    .ant-picker {
+      border-color: #d9d9d9 !important;
+    }
+  }
+
+  .validate-danger {
+    border-color: @color-red;
+
+    &.ant-select:not(.ant-select-borderless) {
+      .ant-select-selector {
+        border-color: @color-red !important;
+      }
+    }
+
+    &.ant-input,
+    &.ant-input-number,
+    &.ant-picker {
+      border-color: @color-red !important;
+    }
+  }
+}
