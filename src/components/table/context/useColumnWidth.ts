@@ -6,6 +6,7 @@ import { Column } from '../type';
 const SCROLLBAR_WIDTH = getScrollbarWidth();
 
 function init(columns: Column[], totalWidth = 0) {
+  // 注：此处使用Math.floor是因为浏览器不支持td、th等元素宽度包含小数，会自动向下取整
   const avgWidth = Math.floor((totalWidth - SCROLLBAR_WIDTH) / columns.length);
   const widthMap: Record<string, number> = {};
   columns.forEach((col) => {
@@ -17,6 +18,7 @@ function init(columns: Column[], totalWidth = 0) {
 export default function useColumnWidth(columns: Column[], tableWidth?: number) {
   const [columnWidth, setColumnWidth] = useState<Record<string, number>>(init(columns, tableWidth));
 
+  // 基于列与表格总宽度，初始化所有列宽为平均值
   useEffect(() => {
     setColumnWidth(init(columns, tableWidth));
   }, [columns, tableWidth]);

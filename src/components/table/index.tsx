@@ -16,7 +16,7 @@ function VTable<RecordType extends Record<string, any>>(props: TableOuterProps<R
     [props, tableSize.width]
   );
 
-  const store = useCreateTable(contextProps as any);
+  const store = useCreateTable(contextProps);
 
   const content = useMemo(
     () => (
