@@ -40,6 +40,8 @@ export interface ColumnAnalysis {
 export interface ColumnExt extends Column {
   left?: number;
   right?: number;
+  isLastFixedLeft?: boolean;
+  isFirstFixedRight?: boolean;
 }
 
 /**
@@ -86,6 +88,8 @@ export interface TableStore<RecordType> extends TableProps<RecordType> {
   // 列宽
   columnWidth: Record<string, number>;
   changeColumnWidth: (k: string, v: number) => void;
+  resizingColumnKey: string;
+  setResizingColumnKey: (v?: string) => void;
   // 列统计
   analysisMap: Record<string, ColumnAnalysis>;
 }

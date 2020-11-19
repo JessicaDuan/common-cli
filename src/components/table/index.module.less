@@ -1,21 +1,54 @@
 @import (reference) '~@/styles/mixins.less';
 @import './utils/config.less';
 
-.cell-style {
-  padding: 4px 16px;
-  margin: -1px;
+// ------- common -------
+
+.table-style() {
+  width: 100%;
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: separate;
 }
 
-.row {
-  &:not(:last-child) {
-    border-bottom: 1px solid @border-color;
+.cell-style() {
+  padding: 4px 16px;
+  margin: 0;
+}
+
+// 固定列样式
+.fixed-style() {
+  .fixed-cell-style() {
+    position: sticky;
+    z-index: 3;
+  }
+
+  &.fixed-left {
+    .fixed-cell-style();
+  }
+
+  &.fixed-right {
+    .fixed-cell-style();
   }
 }
 
-.fixed-cell-style {
-  position: sticky;
-  z-index: 3;
+// ------- resize -------
+
+// 列宽拖动
+.resize-drag-bar {
+  position: absolute;
+  top: 0;
+  right: 1px;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+
+  &.dragging {
+    border-right: 2px dotted @dragging-color;
+    transform: translate(0, 0) !important;
+  }
 }
+
+// ------- table -------
 
 .table-wrapper {
   position: relative;
@@ -24,40 +57,41 @@
   // 表头
   .table-header-background {
     background: @header-bg-color;
+  }
 
-    .table-header-wrapper {
-      overflow: hidden;
+  .table-header-wrapper {
+    overflow: hidden;
 
-      .table-header {
-        width: 100%;
-        table-layout: fixed;
+    .table-header {
+      .table-style();
 
-        .header {
-          border-bottom: 1px solid @border-color;
+      .header {
+        border-bottom: 1px solid @border-color;
 
-          // 表头元素
-          .header-cell {
-            .cell-style();
+        // 表头元素
+        .header-cell {
+          .cell-style();
 
-            position: relative;
-            background: @header-bg-color;
+          .fixed-style();
 
-            &.fixed-left {
-              .fixed-cell-style();
+          position: relative;
+          background: @header-bg-color;
+
+          &:not(:last-child) {
+            border-right: 1px solid darken(@border-color, 5%);
+          }
+
+          &:hover {
+            cursor: pointer;
+            background: darken(@header-bg-color, 5%);
+
+            .resize-drag-bar {
+              border-right: 2px solid @dragging-color;
             }
+          }
 
-            &.fixed-right {
-              .fixed-cell-style();
-            }
-
-            &:hover {
-              cursor: pointer;
-              background: darken(@header-bg-color, 5%);
-            }
-
-            .inner-header-cell {
-              .flex-vertical();
-            }
+          .inner-header-cell {
+            .flex-vertical();
           }
         }
       }
@@ -66,35 +100,78 @@
 
   // 表格主体部分
   .table-body {
-    width: 100%;
-    table-layout: fixed;
+    .table-style();
 
     .body {
       // 行悬浮效果
       .row {
+        .cell {
+          .fixed-style();
+
+          background: @body-bg-color;
+
+          &:not(:last-child) {
+            border-right: 1px solid @border-color;
+          }
+
+          .inner-cell {
+            .cell-style();
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.is-dragging {
+              border-right: 2px dotted fade(@dragging-color, 50%);
+            }
+          }
+        }
+
         &:hover {
           background: fade(@header-bg-color, 30%);
         }
+
+        &:not(:last-child) {
+          .cell {
+            border-bottom: 1px solid @border-color;
+          }
+        }
       }
+    }
+  }
 
-      .cell {
-        background: @body-bg-color;
+  &:not(.ping-left) {
+    .table-header-wrapper .table-header .header .header-cell.is-last-fixed-left,
+    .table-body .body .row .cell.is-last-fixed-left {
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 30px;
+        pointer-events: none;
+        content: '';
+        box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        transform: translateX(100%);
+      }
+    }
+  }
 
-        &.fixed-left {
-          .fixed-cell-style();
-        }
-
-        &.fixed-right {
-          .fixed-cell-style();
-        }
-
-        .inner-cell {
-          .cell-style();
-
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+  &:not(.ping-right) {
+    .table-header-wrapper .table-header .header .header-cell.is-first-fixed-right,
+    .table-body .body .row .cell.is-first-fixed-right {
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        pointer-events: none;
+        content: '';
+        box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        transform: translateX(-100%);
       }
     }
   }

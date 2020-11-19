@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import cn from 'classnames';
 import { useThrottleFn } from 'ahooks';
 import { getScrollbarWidth } from '@/utils';
+import { sum } from 'lodash';
 import Thead from './Thead';
 import Tbody from './Tbody';
 import { useTable } from '../context';
@@ -12,6 +14,9 @@ const SCROLLBAR_WIDTH = getScrollbarWidth();
 function Table() {
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+
+  const [pingLeft, setPingLeft] = useState(true);
+  const [pingRight, setPingRight] = useState(true);
 
   const { height, columns, upHeight, downHeight, onScroll, scrollTop, debug, columnWidth } = useTable();
 
@@ -39,7 +44,10 @@ function Table() {
       }
       onScroll({ scrollTop: bodyRef?.current?.scrollTop, scrollHeight: bodyRef?.current?.scrollHeight });
       if (headerRef?.current && bodyRef?.current) {
-        headerRef.current.scrollLeft = bodyRef.current.scrollLeft;
+        const scrollLeft = bodyRef.current.scrollLeft;
+        headerRef.current.scrollLeft = scrollLeft;
+        setPingLeft(scrollLeft === 0);
+        setPingRight(scrollLeft + headerRef.current?.clientWidth >= sum(Object.values(columnWidth)));
       }
     },
     {
@@ -54,9 +62,18 @@ function Table() {
     }
   }, [scrollTop]);
 
+  const classNames = useMemo(
+    () =>
+      cn(styles['table-wrapper'], {
+        [styles['ping-left']]: pingLeft,
+        [styles['ping-right']]: pingRight,
+      }),
+    [pingLeft, pingRight]
+  );
+
   return useMemo(
     () => (
-      <div className={styles['table-wrapper']}>
+      <div className={classNames}>
         {/* 表头 */}
         <div className={styles['table-header-background']}>
           <div
@@ -81,7 +98,7 @@ function Table() {
         </div>
       </div>
     ),
-    [colGroup, height, onTbodyScroll, upHeight, downHeight]
+    [colGroup, height, onTbodyScroll, upHeight, downHeight, classNames]
   );
 }
 

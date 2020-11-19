@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
+import cn from 'classnames';
 import Tr from '../Tr';
 import Td from './Td';
 import { useTable } from '../../context';
@@ -7,7 +8,7 @@ import styles from '../../index.module.less';
 import { getBgStyle } from './utils';
 
 function Tbody() {
-  const { debug, rowKey, columns, analysisMap, visibleData } = useTable();
+  const { debug, rowKey, columns, analysisMap, visibleData, resizingColumnKey } = useTable();
 
   const defaultRenderer = useCallback((text: any) => text, []);
 
@@ -39,9 +40,12 @@ function Tbody() {
               if (analysisMap[col.key] && col?.dataIndex) {
                 bgStyle = getBgStyle({ ...analysisMap[col.key], current: row[col.dataIndex] });
               }
+              const classNames = cn(styles['inner-cell'], {
+                [styles['is-dragging']]: resizingColumnKey === col.key,
+              });
               return (
                 <Td key={col.key} data={col}>
-                  <div className={styles['inner-cell']} style={{ background: bgStyle, textAlign: col.align }}>
+                  <div className={classNames} style={{ background: bgStyle, textAlign: col.align }}>
                     {getTdContent(row, col)}
                   </div>
                 </Td>
@@ -51,7 +55,7 @@ function Tbody() {
         ))}
       </tbody>
     );
-  }, [debug, visibleData, rowKey, columns, analysisMap, getTdContent]);
+  }, [debug, visibleData, rowKey, columns, analysisMap, getTdContent, resizingColumnKey]);
 }
 
 export default Tbody;

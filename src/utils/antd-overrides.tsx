@@ -6,7 +6,7 @@ import { InputProps, TextAreaProps } from 'antd/lib/input';
 import { InputNumberProps } from 'antd/lib/input-number';
 import { TableProps } from 'antd/lib/table';
 import { ModalProps } from 'antd/lib/modal';
-import Loading from '@/components/loading-component';
+import Loading from '@/components/loading';
 
 // 自定义全局Spin图标
 Spin.setDefaultIndicator(<Loading />);

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { TableOuterProps } from '../type';
 import useSorter from './useSorter';
 import useVirtualScroll from './useVirtualScroll';
-import useColumnWidth from './useColumnWidth';
+import useColumnResize from './useColumnResize';
 import useColumnAnalysis from './useColumnAnalysis';
 
 function init<RecordType>(props: TableOuterProps<RecordType> & { tableWidth?: number }) {
@@ -41,8 +41,12 @@ export default function useTable<RecordType>(outerProps: TableOuterProps<RecordT
   const [formattedDataSource, setFormattedDataSource] = useState(props.dataSource);
 
   // 列宽hook
-  const { columnWidth, changeColumnWidth } = useColumnWidth(props.columns, props.tableWidth);
+  const { columnWidth, changeColumnWidth, resizingColumnKey, setResizingColumnKey } = useColumnResize(
+    props.columns,
+    props.tableWidth
+  );
 
+  // 计算冻结列
   useEffect(() => {
     let fixedLeft = 0;
     const newColumns = cloneDeep(props.columns);
@@ -52,6 +56,7 @@ export default function useTable<RecordType>(outerProps: TableOuterProps<RecordT
         current.left = fixedLeft;
         fixedLeft += Math.floor(columnWidth[current.key]);
       } else {
+        newColumns[i - 1].isLastFixedLeft = true;
         break;
       }
     }
@@ -62,6 +67,7 @@ export default function useTable<RecordType>(outerProps: TableOuterProps<RecordT
         current.right = fixedRight;
         fixedRight += columnWidth[current.key];
       } else {
+        newColumns[i + 1].isFirstFixedRight = true;
         break;
       }
     }
@@ -123,6 +129,8 @@ export default function useTable<RecordType>(outerProps: TableOuterProps<RecordT
     // 列宽
     columnWidth,
     changeColumnWidth,
+    resizingColumnKey,
+    setResizingColumnKey,
     // 列统计
     analysisMap,
   };

@@ -12,7 +12,7 @@ export function isArray(value: any): value is Array<any> {
  * 是否为空
  * @param value
  */
-export function isVoid(value: any): value is void {
+export function isNone(value: any): value is void {
   return value === undefined || value === null;
 }
 
@@ -54,7 +54,7 @@ export function isNumber(value: any): value is number {
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function isEmpty(value: any): value is void | '' | [] | {} {
-  if (isVoid(value)) {
+  if (isNone(value)) {
     return true;
   }
   if (value === '') {
@@ -67,4 +67,26 @@ export function isEmpty(value: any): value is void | '' | [] | {} {
     return Object.keys(value).length === 0;
   }
   return false;
+}
+
+/**
+ * 将值转换为字符串
+ * @param value
+ */
+export function toString(value: unknown) {
+  if (isString(value)) {
+    return value;
+  }
+  if (isNone(value)) {
+    return '';
+  }
+  return String(value);
+}
+
+/**
+ * 将值转换为布尔值
+ * @param value
+ */
+export function toBoolean(value: unknown) {
+  return Boolean(value);
 }

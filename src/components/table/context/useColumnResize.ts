@@ -15,7 +15,8 @@ function init(columns: Column[], totalWidth = 0) {
   return widthMap;
 }
 
-export default function useColumnWidth(columns: Column[], tableWidth?: number) {
+export default function useColumnResize(columns: Column[], tableWidth?: number) {
+  const [resizingColumnKey, setResizingColumnKey] = useState<string>();
   const [columnWidth, setColumnWidth] = useState<Record<string, number>>(init(columns, tableWidth));
 
   // 基于列与表格总宽度，初始化所有列宽为平均值
@@ -31,6 +32,8 @@ export default function useColumnWidth(columns: Column[], tableWidth?: number) {
   }, []);
 
   return {
+    resizingColumnKey,
+    setResizingColumnKey,
     columnWidth,
     changeColumnWidth,
   };
