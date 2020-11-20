@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { Button } from 'antd';
 import Table from '@/components/table';
 import { Column } from '@/components/table/type';
 import { getRandomInteger } from '@/utils';
@@ -43,6 +44,9 @@ const getRender = (key: string, record: any) => {
 };
 
 const ColorTable = () => {
+  const [loading, setLoading] = useState(false);
+  const [ds, setDs] = useState<Record<string, any>[]>([]);
+
   const origColumns: Column[] = [
     {
       key: 'id',
@@ -93,19 +97,32 @@ const ColorTable = () => {
     render: col.dataIndex ? (_: unknown, record: any) => getRender(col.dataIndex as string, record) : col.render,
   }));
 
-  const dataSource = Array.from(new Array(10000)).map((o, idx) => {
-    return {
-      id: idx + 1,
-      name: `test${idx + 1}`,
-      description: `descsafasfasdfasdfasdfsadfasf dfasfasdfasd dsfadsfasdfasdf adsfadsfasd${idx + 1}`,
-      benefit: getRandomInteger(-500, 1000),
-      login_count: String(getRandomInteger(0, 100)),
-    };
-  });
+  const getData = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => {
+      const dataSource = Array.from(new Array(10000)).map((o, idx) => {
+        return {
+          id: idx + 1,
+          name: `test${idx + 1}`,
+          description: `descsafasfasdfasdfasdfsadfasf dfasfasdfasd dsfadsfasdfasdf adsfadsfasd${idx + 1}`,
+          benefit: getRandomInteger(-500, 1000),
+          login_count: String(getRandomInteger(0, 100)),
+        };
+      });
+      setDs(dataSource);
+      setLoading(false);
+    }, 3000);
+  }, []);
 
   return (
     <div style={{ padding: 24 }}>
-      <Table rowKey="id" columns={columns} dataSource={dataSource} height={300} debug />
+      <div style={{ marginBottom: 8 }}>
+        <Button type="primary" onClick={() => getData()}>
+          get data
+        </Button>
+        <Button onClick={() => setDs([])}>clear</Button>
+      </div>
+      <Table rowKey="id" columns={columns} dataSource={ds} height={300} loading={loading} debug />
     </div>
   );
 };

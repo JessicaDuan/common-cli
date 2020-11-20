@@ -1,7 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { ScrollProps, TableProps } from '../type';
+import { ScrollProps, TableInitProps } from '../type';
 
-export default function useVirtualScroll<RecordType>(props: TableProps<RecordType>, formattedDataSource: RecordType[]) {
+export default function useVirtualScroll<RecordType>(
+  props: TableInitProps<RecordType>,
+  formattedDataSource: RecordType[]
+) {
   const [startRowIndex, setStartRowIndex] = useState(0); // 可见的第一行行号
   const [scrollTop, setScrollTop] = useState(0); // 滚动条距离顶部高度
 

@@ -1,11 +1,12 @@
-import React, { FC, memo } from 'react';
-import { Spin } from 'antd';
-import { SpinProps } from 'antd/lib/spin';
+import React, { memo } from 'react';
+import { Loading3QuartersOutlined } from '@ant-design/icons';
+import styles from './index.module.less';
 
-const Loading: FC<SpinProps> = (props) => {
+const Loading = () => {
   return (
     <div className="flexbox">
-      <Spin tip="加载中..." {...props} />
+      <Loading3QuartersOutlined spin className={styles.loading} />
+      <span className={styles.tip}>加载中...</span>
     </div>
   );
 };

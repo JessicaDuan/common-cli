@@ -1,8 +1,8 @@
 import { maxBy, minBy } from 'lodash';
 import { useEffect, useState } from 'react';
-import { TableProps, ColumnAnalysis } from '../type';
+import { TableInitProps, ColumnAnalysis } from '../type';
 
-export default function useColumnAnalysis<RecordType extends Record<string, any>>(props: TableProps<RecordType>) {
+export default function useColumnAnalysis<RecordType extends Record<string, any>>(props: TableInitProps<RecordType>) {
   const [analysisMap, setAnalysisMap] = useState({});
 
   const { columns, dataSource } = props;

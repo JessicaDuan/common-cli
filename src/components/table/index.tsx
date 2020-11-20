@@ -1,10 +1,10 @@
 import React, { useMemo, memo, useRef } from 'react';
 import { useSize } from 'ahooks';
-import { TableOuterProps } from './type';
+import { TableProps } from './type';
 import Table from './components/Table';
 import Context, { useCreateTable } from './context';
 
-function VTable<RecordType extends Record<string, any>>(props: TableOuterProps<RecordType>) {
+function VTable<RecordType extends Record<string, any>>(props: TableProps<RecordType>) {
   const tableRef = useRef<HTMLDivElement>(null);
   const tableSize = useSize(tableRef);
 

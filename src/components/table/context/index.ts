@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import { TableOuterProps, TableStore } from '../type';
+import { TableProps, TableStore } from '../type';
 import useTableStore from './useTable';
 
 const context = createContext({} as TableStore<any>);
 
-function useCreateTable<RecordType = any>(props: TableOuterProps<RecordType> & { tableWidth?: number }) {
+function useCreateTable<RecordType = any>(props: TableProps<RecordType> & { tableWidth?: number }) {
   const store = useTableStore(props);
   return store;
 }

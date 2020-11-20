@@ -47,25 +47,25 @@ export interface ColumnExt extends Column {
 /**
  * 外部传入表格属性
  */
-export interface TableOuterProps<RecordType> {
-  readonly rowKey: string;
+export interface TableProps<RecordType> {
+  readonly rowKey: string; // 每行数据中可作为唯一key的属性
   readonly columns: ColumnExt[];
   readonly dataSource: RecordType[];
-  readonly height: number;
-  readonly cacheSize?: number;
-  readonly lineHeight?: number;
+  readonly height: number; // 表格主体内容区域高度
+  readonly cacheSize?: number; // 缓冲区数量
+  readonly lineHeight?: number; // 行高
   readonly debug?: boolean; // debug模式打印log
+  readonly loading?: boolean;
 }
 
 /**
- * 初始化后的表格属性
+ * 初始化后的表格属性（填充默认值等）
  */
-export interface TableProps<RecordType> extends TableOuterProps<RecordType> {
-  readonly tableWidth?: number;
-  readonly totalRowCount: number;
-  readonly totalHeight: number;
-  visibleRowCount: number;
-  scrollBarHeight: number;
+export interface TableInitProps<RecordType> extends TableProps<RecordType> {
+  readonly tableWidth?: number; // 表格实际的宽度
+  readonly totalRowCount: number; // 数据总行数
+  readonly totalHeight: number; // 表格数据实际的总高度
+  visibleRowCount: number; // 表格可见区域可展示的数据行数
   cacheSize: number;
   lineHeight: number;
 }
@@ -73,7 +73,7 @@ export interface TableProps<RecordType> extends TableOuterProps<RecordType> {
 /**
  * 表格内部共享store
  */
-export interface TableStore<RecordType> extends TableProps<RecordType> {
+export interface TableStore<RecordType> extends TableInitProps<RecordType> {
   formattedDataSource: RecordType[];
   // 虚拟滚动相关
   readonly cacheSize: number;
@@ -81,8 +81,8 @@ export interface TableStore<RecordType> extends TableProps<RecordType> {
   visibleRowCount: number;
   startRowIndex: number;
   visibleData: RecordType[];
-  upHeight: number;
-  downHeight: number;
+  upHeight: number; // 实际渲染区上方的数据高度
+  downHeight: number; // 实际渲染区下方的数据高度
   scrollTop: number;
   onScroll: (v: ScrollProps) => void;
   // 排序

@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
+import { Spin } from 'antd';
 import { useThrottleFn } from 'ahooks';
 import { getScrollbarWidth } from '@/utils';
 import { sum } from 'lodash';
+import Loading from '@/components/loading';
+import { Empty } from '@/components/empty-box';
 import Thead from './Thead';
 import Tbody from './Tbody';
 import { useTable } from '../context';
@@ -19,7 +22,18 @@ function Table() {
   const [pingLeft, setPingLeft] = useState(true);
   const [pingRight, setPingRight] = useState(true);
 
-  const { height, columns, upHeight, downHeight, onScroll, scrollTop, debug, columnWidth } = useTable();
+  const {
+    loading,
+    totalRowCount,
+    height,
+    columns,
+    upHeight,
+    downHeight,
+    onScroll,
+    scrollTop,
+    debug,
+    columnWidth,
+  } = useTable();
 
   // 表头与主体部分的列宽对应
   const colGroup = useMemo(
@@ -95,16 +109,28 @@ function Table() {
           style={{ height }}
           onScroll={onTbodyScroll}
         >
-          <div style={{ height: upHeight }} />
-          <table className={styles[LESS_BODY_TABLE_PREFIX]}>
-            {colGroup}
-            <Tbody />
-          </table>
-          <div style={{ height: downHeight }} />
+          {loading ? (
+            <Loading />
+          ) : (
+            <Spin spinning={loading}>
+              {totalRowCount === 0 ? (
+                <Empty height={height} />
+              ) : (
+                <>
+                  <div style={{ height: upHeight }} />
+                  <table className={styles[LESS_BODY_TABLE_PREFIX]}>
+                    {colGroup}
+                    <Tbody />
+                  </table>
+                  <div style={{ height: downHeight }} />
+                </>
+              )}
+            </Spin>
+          )}
         </div>
       </div>
     ),
-    [colGroup, height, onTbodyScroll, upHeight, downHeight, classNames]
+    [colGroup, height, onTbodyScroll, upHeight, downHeight, classNames, totalRowCount, loading]
   );
 }
 

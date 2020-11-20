@@ -1,13 +1,13 @@
 import { sortAsc, sortDesc } from '@/utils';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
-import { TableOuterProps } from '../type';
+import { TableProps } from '../type';
 import useSorter from './useSorter';
 import useVirtualScroll from './useVirtualScroll';
 import useColumnResize from './useColumnResize';
 import useColumnAnalysis from './useColumnAnalysis';
 
-function init<RecordType>(props: TableOuterProps<RecordType> & { tableWidth?: number }) {
+function init<RecordType>(props: TableProps<RecordType> & { tableWidth?: number }) {
   const columns = props.columns || [];
 
   const newProps = {
@@ -24,18 +24,16 @@ function init<RecordType>(props: TableOuterProps<RecordType> & { tableWidth?: nu
   const { dataSource, lineHeight, height } = newProps;
   const totalHeight = dataSource.length * lineHeight; // [定值]表格总高度
   const visibleRowCount = Math.ceil(height / lineHeight); // [定值]可见行数
-  const scrollBarHeight = (visibleRowCount / dataSource.length) * height; // [定值]滚动条的高度
 
   return {
     ...newProps,
     totalRowCount: dataSource.length, // [定值]总行数
     totalHeight,
     visibleRowCount,
-    scrollBarHeight,
   };
 }
 
-export default function useTable<RecordType>(outerProps: TableOuterProps<RecordType> & { tableWidth?: number }) {
+export default function useTable<RecordType>(outerProps: TableProps<RecordType> & { tableWidth?: number }) {
   const [props, setProps] = useState(init(outerProps));
   const [columns, setColumns] = useState(props.columns);
   const [formattedDataSource, setFormattedDataSource] = useState(props.dataSource);
