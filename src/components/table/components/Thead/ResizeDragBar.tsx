@@ -20,7 +20,6 @@ const ResizeDragBar: FC<ResizeDragBarProps> = ({ onDrag: onUpperDrag, onDragStar
       onDrag={onDrag}
       onStop={onDragEnd}
       position={{ x: 0, y: 0 }}
-      defaultClassName={styles['']}
       defaultClassNameDragging={styles.dragging}
     >
       <div className={styles['resize-drag-bar']} />
