@@ -11,8 +11,8 @@ export interface Column {
   fixed?: 'left' | 'right';
   showScaleBar?: boolean; // 展示比例条
   align?: 'left' | 'right' | 'center';
-  sorter?: boolean | ((text: any, record: any) => ReactText);
-  render?: (text: any, record: any) => ReactNode;
+  sorter?: boolean;
+  render?: (text: ReactText, record: any) => ReactNode;
 }
 
 export interface ScrollProps {
@@ -57,6 +57,9 @@ export interface TableOuterProps<RecordType> {
   readonly debug?: boolean; // debug模式打印log
 }
 
+/**
+ * 初始化后的表格属性
+ */
 export interface TableProps<RecordType> extends TableOuterProps<RecordType> {
   readonly tableWidth?: number;
   readonly totalRowCount: number;
