@@ -7,6 +7,7 @@ import ResizeDragBar from './ResizeDragBar';
 import { ColumnExt } from '../../type';
 import { useTable } from '../../context';
 import styles from '../../index.module.less';
+import { LESS_HEADER_TABLE_PREFIX } from '../../utils';
 
 interface ThProps {
   data: ColumnExt;
@@ -59,7 +60,7 @@ const Th: FC<ThProps> = ({ data }) => {
 
   const classNames = useMemo(
     () =>
-      cn(styles['header-cell'], {
+      cn(styles[`${LESS_HEADER_TABLE_PREFIX}-th`], {
         [styles['fixed-left']]: !isEmpty(data.left),
         [styles['is-last-fixed-left']]: !isEmpty(data.isLastFixedLeft),
         [styles['fixed-right']]: !isEmpty(data.right),
@@ -72,7 +73,7 @@ const Th: FC<ThProps> = ({ data }) => {
     () => (
       <th className={classNames} style={{ left: data.left, right: data.right }}>
         <div
-          className={styles['inner-header-cell']}
+          className={styles[`${LESS_HEADER_TABLE_PREFIX}-th-inner`]}
           onClick={onClick}
           style={{ justifyContent: alignToFlexMap[data.align || 'left'] }}
         >

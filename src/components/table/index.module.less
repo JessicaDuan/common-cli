@@ -1,7 +1,15 @@
 @import (reference) '~@/styles/mixins.less';
-@import './utils/config.less';
 
-// ------- common -------
+@border-color: #f3f3f3;
+@header-bg-color: #f3f3f3;
+@body-bg-color: #fff;
+@hover-bg-color: #f7f7f7;
+@dragging-color: #69c0ff;
+
+@header-table-prefix: header-table;
+@body-table-prefix: body-table;
+
+// ================== mixin ==================
 
 .table-style() {
   width: 100%;
@@ -15,25 +23,18 @@
   margin: 0;
 }
 
-// 固定列样式
-.fixed-style() {
-  .fixed-cell-style() {
-    position: sticky;
-    z-index: 3;
-  }
-
-  &.fixed-left {
-    .fixed-cell-style();
-  }
-
-  &.fixed-right {
-    .fixed-cell-style();
-  }
+.fixed-shadow-box() {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  pointer-events: none;
+  content: '';
+  transition: box-shadow 0.3s;
 }
 
-// ------- resize -------
+// ================== common ==================
 
-// 列宽拖动
 .resize-drag-bar {
   position: absolute;
   top: 0;
@@ -48,131 +49,138 @@
   }
 }
 
-// ------- table -------
+// ================== table ==================
 
-.table-wrapper {
+// ---------- 根容器 ----------
+.table-root-wrapper {
   position: relative;
   border: 1px solid @border-color;
 
-  // 表头
-  .table-header-background {
-    background: @header-bg-color;
-  }
-
-  .table-header-wrapper {
-    overflow: hidden;
-
-    .table-header {
-      .table-style();
-
-      .header {
-        border-bottom: 1px solid @border-color;
-
-        // 表头元素
-        .header-cell {
-          .cell-style();
-
-          .fixed-style();
-
-          position: relative;
-          background: @header-bg-color;
-
-          &:not(:last-child) {
-            border-right: 1px solid darken(@border-color, 5%);
-          }
-
-          &:hover {
-            cursor: pointer;
-            background: darken(@header-bg-color, 5%);
-
-            .resize-drag-bar {
-              border-right: 2px solid @dragging-color;
-            }
-          }
-
-          .inner-header-cell {
-            .flex-vertical();
-          }
-        }
-      }
-    }
-  }
-
-  // 表格主体部分
-  .table-body {
-    .table-style();
-
-    .body {
-      // 行悬浮效果
-      .row {
-        .cell {
-          .fixed-style();
-
-          background: @body-bg-color;
-
-          &:not(:last-child) {
-            border-right: 1px solid @border-color;
-          }
-
-          .inner-cell {
-            .cell-style();
-
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            &.is-dragging {
-              border-right: 2px dotted fade(@dragging-color, 50%);
-            }
-          }
-        }
-
-        &:hover {
-          background: fade(@header-bg-color, 30%);
-        }
-
-        &:not(:last-child) {
-          .cell {
-            border-bottom: 1px solid @border-color;
-          }
-        }
-      }
-    }
-  }
-
   &:not(.ping-left) {
-    .table-header-wrapper .table-header .header .header-cell.is-last-fixed-left,
-    .table-body .body .row .cell.is-last-fixed-left {
+    // 横向滚动条未滑至最左侧时，左侧的最后一个固定列需展示右阴影
+    .is-last-fixed-left {
       &::after {
-        position: absolute;
-        top: 0;
+        .fixed-shadow-box();
+
         right: 0;
-        bottom: 0;
-        width: 30px;
-        pointer-events: none;
-        content: '';
         box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s;
         transform: translateX(100%);
       }
     }
   }
 
   &:not(.ping-right) {
-    .table-header-wrapper .table-header .header .header-cell.is-first-fixed-right,
-    .table-body .body .row .cell.is-first-fixed-right {
+    // 横向滚动条未滑至最右侧时，右侧的第一个固定列需展示左阴影
+    .is-first-fixed-right {
       &::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
+        .fixed-shadow-box();
+
         left: 0;
-        width: 30px;
-        pointer-events: none;
-        content: '';
         box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s;
         transform: translateX(-100%);
       }
     }
   }
+}
+
+// ---------- 表头table ----------
+.@{header-table-prefix} {
+  .table-style();
+
+  &-background {
+    // 唯一作用：保证滚动条上方的表头区域有背景色
+    background: @header-bg-color;
+  }
+
+  &-wrapper {
+    // 表头部分不允许出现滚动条，滚动事件从表格的body部分同步
+    overflow: hidden;
+  }
+
+  &-thead {
+    // 表头下边框
+    border-bottom: 1px solid @border-color;
+  }
+
+  &-th {
+    .cell-style();
+
+    position: relative;
+    background: @header-bg-color;
+
+    &:not(:last-child) {
+      border-right: 1px solid darken(@border-color, 5%);
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: darken(@header-bg-color, 5%);
+
+      .resize-drag-bar {
+        border-right: 2px solid @dragging-color;
+      }
+    }
+  }
+
+  &-th-inner {
+    .flex-vertical();
+  }
+}
+
+// ---------- 表主体table ----------
+
+.@{body-table-prefix} {
+  .table-style();
+
+  &-wrapper {
+    overflow: auto;
+  }
+
+  &-td {
+    background: @body-bg-color;
+
+    &:not(:last-child) {
+      border-right: 1px solid @border-color;
+    }
+  }
+
+  &-td-inner {
+    .cell-style();
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-dragging {
+      // 当前列被拖动时，右侧展示拖动的轴线
+      border-right: 2px dotted fade(@dragging-color, 50%);
+    }
+  }
+
+  &-tbody {
+    .tr {
+      &:hover {
+        // 行悬浮效果
+        .@{body-table-prefix}-td {
+          background: @hover-bg-color;
+        }
+      }
+
+      &:not(:last-child) {
+        // 非最后一行的td增加下边框
+        .@{body-table-prefix}-td {
+          border-bottom: 1px solid @border-color;
+        }
+      }
+    }
+  }
+}
+
+// ================== common ==================
+
+// 放在th、td后，position：sticky优先级高于th、td元素的position：relative
+.fixed-left,
+.fixed-right {
+  position: sticky;
+  z-index: 3;
 }

@@ -6,6 +6,7 @@ import { useTable } from '../../context';
 import { Column } from '../../type';
 import styles from '../../index.module.less';
 import { getBgStyle } from './utils';
+import { LESS_BODY_TABLE_PREFIX } from '../../utils';
 
 function Tbody() {
   const { debug, rowKey, columns, analysisMap, visibleData, resizingColumnKey } = useTable();
@@ -32,7 +33,7 @@ function Tbody() {
       console.log('%c[Render]Tbody', 'color: grey');
     }
     return (
-      <tbody className={styles.body}>
+      <tbody className={styles[`${LESS_BODY_TABLE_PREFIX}-tbody`]}>
         {visibleData.map((row) => (
           <Tr key={(row as any)[rowKey]}>
             {columns.map((col) => {
@@ -40,7 +41,7 @@ function Tbody() {
               if (analysisMap[col.key] && col?.dataIndex) {
                 bgStyle = getBgStyle({ ...analysisMap[col.key], current: row[col.dataIndex] });
               }
-              const classNames = cn(styles['inner-cell'], {
+              const classNames = cn(styles[`${LESS_BODY_TABLE_PREFIX}-td-inner`], {
                 [styles['is-dragging']]: resizingColumnKey === col.key,
               });
               return (

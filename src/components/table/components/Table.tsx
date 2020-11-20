@@ -7,6 +7,7 @@ import Thead from './Thead';
 import Tbody from './Tbody';
 import { useTable } from '../context';
 import styles from '../index.module.less';
+import { LESS_BODY_TABLE_PREFIX, LESS_HEADER_TABLE_PREFIX } from '../utils';
 
 // 获取浏览器滚动条宽度
 const SCROLLBAR_WIDTH = getScrollbarWidth();
@@ -64,7 +65,7 @@ function Table() {
 
   const classNames = useMemo(
     () =>
-      cn(styles['table-wrapper'], {
+      cn(styles['table-root-wrapper'], {
         [styles['ping-left']]: pingLeft,
         [styles['ping-right']]: pingRight,
       }),
@@ -75,22 +76,27 @@ function Table() {
     () => (
       <div className={classNames}>
         {/* 表头 */}
-        <div className={styles['table-header-background']}>
+        <div className={styles[`${LESS_HEADER_TABLE_PREFIX}-background`]}>
           <div
             ref={headerRef}
-            className={styles['table-header-wrapper']}
+            className={styles[`${LESS_HEADER_TABLE_PREFIX}-wrapper`]}
             style={{ width: `calc(100% - ${SCROLLBAR_WIDTH}px)` }}
           >
-            <table className={styles['table-header']}>
+            <table className={styles[LESS_HEADER_TABLE_PREFIX]}>
               {colGroup}
               <Thead />
             </table>
           </div>
         </div>
         {/* 表格主体 */}
-        <div ref={bodyRef} style={{ height, overflow: 'auto' }} onScroll={onTbodyScroll}>
+        <div
+          ref={bodyRef}
+          className={styles[`${LESS_BODY_TABLE_PREFIX}-wrapper`]}
+          style={{ height }}
+          onScroll={onTbodyScroll}
+        >
           <div style={{ height: upHeight }} />
-          <table className={styles['table-body']}>
+          <table className={styles[LESS_BODY_TABLE_PREFIX]}>
             {colGroup}
             <Tbody />
           </table>
