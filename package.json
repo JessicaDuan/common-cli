@@ -17,7 +17,6 @@
     "@types/react-dom": "^16.9.8",
     "ahooks": "^2.9.1",
     "antd": "^4.8.4",
-    "beautiful-react-diagrams": "^0.4.0",
     "classnames": "^2.2.6",
     "craco-alias": "^2.1.1",
     "craco-antd": "^1.19.0",
