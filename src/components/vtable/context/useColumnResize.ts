@@ -15,14 +15,14 @@ function init(columns: Column[], totalWidth = 0) {
   return widthMap;
 }
 
-export default function useColumnResize(columns: Column[], tableWidth?: number) {
+export default function useColumnResize(columns: Column[], width?: number) {
   const [resizingColumnKey, setResizingColumnKey] = useState<string>();
-  const [columnWidth, setColumnWidth] = useState<Record<string, number>>(init(columns, tableWidth));
+  const [columnWidth, setColumnWidth] = useState<Record<string, number>>(init(columns, width));
 
   // 基于列与表格总宽度，初始化所有列宽为平均值
   useEffect(() => {
-    setColumnWidth(init(columns, tableWidth));
-  }, [columns, tableWidth]);
+    setColumnWidth(init(columns, width));
+  }, [columns, width]);
 
   const changeColumnWidth = useCallback((key: string, v: number) => {
     setColumnWidth((prev) => ({

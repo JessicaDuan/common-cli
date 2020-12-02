@@ -13,7 +13,7 @@ export function findValueInList(
   arr: any[],
   value: string | number,
   key: string,
-  labelKey: string,
+  labelKey: string | null,
   returnOriginIfNull = true
 ) {
   const obj = arr.find((o) => o[key] === value);

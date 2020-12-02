@@ -7,12 +7,12 @@ import useVirtualScroll from './useVirtualScroll';
 import useColumnResize from './useColumnResize';
 import useColumnAnalysis from './useColumnAnalysis';
 
-function init<RecordType>(props: TableProps<RecordType> & { tableWidth?: number }) {
+function init<RecordType>(props: TableProps<RecordType>) {
   const columns = props.columns || [];
 
   const newProps = {
     ...props,
-    height: props.height || 300, // [定值]表格可见高度
+    height: props.height || 0, // [定值]表格可见高度
     columns: columns
       .filter((o) => o.fixed === 'left')
       .concat(columns.filter((o) => o.fixed !== 'left' && o.fixed !== 'right'))
@@ -21,6 +21,7 @@ function init<RecordType>(props: TableProps<RecordType> & { tableWidth?: number 
     cacheSize: props.cacheSize || 20, // [定值]缓冲区大小
     lineHeight: props.lineHeight || 30, // [定值]行高
   };
+  newProps.height -= newProps.lineHeight + 2;
   const { dataSource, lineHeight, height } = newProps;
   const totalHeight = dataSource.length * lineHeight; // [定值]表格总高度
   const visibleRowCount = Math.ceil(height / lineHeight); // [定值]可见行数
@@ -33,7 +34,7 @@ function init<RecordType>(props: TableProps<RecordType> & { tableWidth?: number 
   };
 }
 
-export default function useTable<RecordType>(outerProps: TableProps<RecordType> & { tableWidth?: number }) {
+export default function useTable<RecordType>(outerProps: TableProps<RecordType>) {
   const [props, setProps] = useState(init(outerProps));
   const [columns, setColumns] = useState(props.columns);
   const [formattedDataSource, setFormattedDataSource] = useState(props.dataSource);
@@ -41,7 +42,7 @@ export default function useTable<RecordType>(outerProps: TableProps<RecordType> 
   // 列宽hook
   const { columnWidth, changeColumnWidth, resizingColumnKey, setResizingColumnKey } = useColumnResize(
     props.columns,
-    props.tableWidth
+    props.width
   );
 
   // 计算冻结列

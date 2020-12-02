@@ -33,6 +33,12 @@
   transition: box-shadow 0.3s;
 }
 
+.nowrap() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 // ================== common ==================
 
 .resize-drag-bar {
@@ -124,6 +130,7 @@
 
   &-th-inner {
     .flex-vertical();
+    .nowrap();
   }
 }
 
@@ -146,10 +153,7 @@
 
   &-td-inner {
     .cell-style();
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .nowrap();
 
     &.is-dragging {
       // 当前列被拖动时，右侧展示拖动的轴线

@@ -4,7 +4,7 @@ import useTableStore from './useTable';
 
 const context = createContext({} as TableStore<any>);
 
-function useCreateTable<RecordType = any>(props: TableProps<RecordType> & { tableWidth?: number }) {
+function useCreateTable<RecordType = any>(props: TableProps<RecordType>) {
   const store = useTableStore(props);
   return store;
 }

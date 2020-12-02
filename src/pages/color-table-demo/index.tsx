@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from 'antd';
-import Table from '@/components/table';
-import { Column } from '@/components/table/type';
+import Table from '@/components/vtable';
+import { Column } from '@/components/vtable/type';
 import { getRandomInteger } from '@/utils';
 import { getColor } from './utils';
 import { ColorSetting } from './type';
@@ -122,7 +122,9 @@ const ColorTable = () => {
         </Button>
         <Button onClick={() => setDs([])}>clear</Button>
       </div>
-      <Table rowKey="id" columns={columns} dataSource={ds} height={300} loading={loading} debug />
+      <div style={{ height: 500 }}>
+        <Table rowKey="id" columns={columns} dataSource={ds} loading={loading} debug />
+      </div>
     </div>
   );
 };

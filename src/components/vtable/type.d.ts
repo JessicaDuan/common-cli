@@ -51,7 +51,8 @@ export interface TableProps<RecordType> {
   readonly rowKey: string; // 每行数据中可作为唯一key的属性
   readonly columns: ColumnExt[];
   readonly dataSource: RecordType[];
-  readonly height: number; // 表格主体内容区域高度
+  readonly width?: number;
+  readonly height?: number;
   readonly cacheSize?: number; // 缓冲区数量
   readonly lineHeight?: number; // 行高
   readonly debug?: boolean; // debug模式打印log
@@ -62,7 +63,6 @@ export interface TableProps<RecordType> {
  * 初始化后的表格属性（填充默认值等）
  */
 export interface TableInitProps<RecordType> extends TableProps<RecordType> {
-  readonly tableWidth?: number; // 表格实际的宽度
   readonly totalRowCount: number; // 数据总行数
   readonly totalHeight: number; // 表格数据实际的总高度
   visibleRowCount: number; // 表格可见区域可展示的数据行数

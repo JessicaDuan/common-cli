@@ -10,10 +10,11 @@ function VTable<RecordType extends Record<string, any>>(props: TableProps<Record
 
   const contextProps = useMemo(
     () => ({
-      ...props,
-      tableWidth: tableSize.width,
+      width: tableSize.width,
+      height: tableSize.height,
+      ...props, // 如未手动传入width和height，则获取容器大小
     }),
-    [props, tableSize.width]
+    [props, tableSize.width, tableSize.height]
   );
 
   const store = useCreateTable(contextProps);
@@ -27,7 +28,14 @@ function VTable<RecordType extends Record<string, any>>(props: TableProps<Record
     [store]
   );
 
-  return useMemo(() => <div ref={tableRef}>{content}</div>, [content]);
+  return useMemo(
+    () => (
+      <div ref={tableRef} style={{ height: '100%' }}>
+        {content}
+      </div>
+    ),
+    [content]
+  );
 }
 
 export default memo(VTable);
